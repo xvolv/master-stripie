@@ -7,7 +7,7 @@ import {
 import { useState, useEffect } from "react";
 import convertToSubcurrency from "@/lib/convertToSubcurrency";
 
-const CheckoutPage = ({ amount }: { amount: number }) => {
+const CheckoutPage = ({ amount, sellerAccountId }: { amount: number; sellerAccountId: string }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [errorMessage, setErrorMessage] = useState<string>();
@@ -20,13 +20,16 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ amount: convertToSubcurrency(amount, 100) }),
+      body: JSON.stringify({
+        amount: convertToSubcurrency(amount, 100),
+        destinationAccountId: sellerAccountId,
+      }),
     })
       .then((res) => res.json())
       .then((data) => {
         setClientSecret(data.clientSecret);
       });
-  }, [amount]);
+  }, [amount, sellerAccountId]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

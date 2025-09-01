@@ -8,6 +8,9 @@ const stripePromise = loadStripe(
 );
 export default function Home() {
   const amount = 49.99;
+  // For demo purposes, set your test connected account ID here as a public env var
+  const sellerAccountId = process.env
+    .NEXT_PUBLIC_STRIPE_DESTINATION_ACCOUNT_ID as string;
   return (
     <main className="max-w6xl mx-auto p-10 text-white text-center border m-10 rounded-md bg-gradient-to-tr from-blue-500 to-purple-500">
       <div className="mb-10">
@@ -26,7 +29,7 @@ export default function Home() {
           currency: "usd",
         }}
       >
-        <CheckoutPage amount={convertToSubcurrency(amount,100)} />
+        <CheckoutPage amount={amount} sellerAccountId={sellerAccountId} />
       </Elements>
     </main>
   );
